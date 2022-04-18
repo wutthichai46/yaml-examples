@@ -1,0 +1,30 @@
+# Runtime parameters
+parameters:
+- name : modelRepository
+  displayName: Name of the model repository
+  type: string
+  default: A
+
+trigger: none
+
+pool:
+  vmImage: 'windows-latest'
+
+extends: 
+  template: template.yml
+  parameters:
+    modelRepository: ${{ parameters.modelRepository }}
+    stages:
+      - stage: 
+        jobs:
+          - job: Dev_Stage_AKS_Model_Deployment
+            displayName: 'Dev Stage AKS Model Deployment'
+            steps:
+
+            - checkout: self
+              path: pipeline_repo/
+            - checkout: ${{ parameters.modelRepository }}                            
+            - script: |
+                    echo Hello World
+              displayName: 'Command Line Script: Hello World'
+              failOnStderr: true
